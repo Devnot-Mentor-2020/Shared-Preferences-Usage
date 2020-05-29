@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences_usage/components/enum/shared_preferences_keys.dart';
+import 'package:shared_preferences_usage/preferences/shared_preferences_helper.dart';
 import 'components/buttons/my_raised_button.dart';
 class SharedPrefPage extends StatefulWidget {
   @override
@@ -9,8 +11,7 @@ class SharedPrefPage extends StatefulWidget {
 
 class _SharedPrefPageState extends State<SharedPrefPage> {
   String _name;
-  int _age;
-  SharedPreferences mySharedPreference;
+  String _age;
   TextEditingController _nameController = TextEditingController();
   TextEditingController _ageController = TextEditingController();
   final GlobalKey<ScaffoldState> _scaffoldkey= new GlobalKey<ScaffoldState>();
@@ -21,11 +22,7 @@ class _SharedPrefPageState extends State<SharedPrefPage> {
   @override
   void initState() {
     super.initState();
-    getSharedPreference();
-  }
-
-  void getSharedPreference() async{
-    mySharedPreference= await SharedPreferences.getInstance();
+    PreferenceUtils.init();
   }
 
   @override
@@ -76,30 +73,28 @@ class _SharedPrefPageState extends State<SharedPrefPage> {
     return Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                ShapedRaisedButton(onPressed: _addInfo,color: Colors.green,buttonText: "Add info",),
-                ShapedRaisedButton(onPressed: _getInfo,color: Colors.blue,buttonText:"Show Info",),
-                ShapedRaisedButton(onPressed: _deleteInfo,color: Colors.red,buttonText:"remove info",),
+                ShapedRaisedButton(onPressed:_addInfo,color: Colors.green,buttonText: "Add info",),
+                ShapedRaisedButton(onPressed:_getInfo,color: Colors.blue,buttonText:"Show Info",),
+                ShapedRaisedButton(onPressed:_deleteInfo,color: Colors.red,buttonText:"remove info",),
               ],
             );
   }
 
-  void _addInfo() async{
-    await mySharedPreference.setString("name", _nameController.text);
-    await mySharedPreference.setInt("age", int.parse(_ageController.text));
+  void _addInfo() {
+    PreferenceUtils.setString(SharedPrefKeys.NAME.toString(), _nameController.text);
+    PreferenceUtils.setString(SharedPrefKeys.AGE.toString(), _ageController.text);
   }
 
   void _getInfo() {
-    _name = mySharedPreference.getString("name");
-    _age = mySharedPreference.getInt("age");
+    _name = PreferenceUtils.getString(SharedPrefKeys.NAME.toString(),);
+    _age = PreferenceUtils.getString(SharedPrefKeys.AGE.toString(),);
     _scaffoldkey.currentState.showSnackBar(SnackBar(
       backgroundColor: Colors.blue,
-      content: Text("Name: $_name\nAge: $_age"),
+      content: Text("Name: $_name \n Age: $_age"),
     ));
-
   }
-
   void _deleteInfo(){
-    mySharedPreference.remove("name");
-    mySharedPreference.remove("age");
+    PreferenceUtils.remove(SharedPrefKeys.NAME.toString());
+    PreferenceUtils.remove(SharedPrefKeys.AGE.toString());
   }
 }
