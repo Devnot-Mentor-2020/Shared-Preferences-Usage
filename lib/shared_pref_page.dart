@@ -81,20 +81,20 @@ class _SharedPrefPageState extends State<SharedPrefPage> {
   }
 
   void _addInfo() {
-    PreferenceUtils.setString(SharedPrefKeys.NAME.toString(), _nameController.text);
-    PreferenceUtils.setString(SharedPrefKeys.AGE.toString(), _ageController.text);
+    PreferenceUtils.setString(SharedPrefKeys.NAME, _nameController.text);
+    PreferenceUtils.setString(SharedPrefKeys.AGE, _ageController.text);
   }
 
   void _getInfo() {
-    _name = PreferenceUtils.getString(SharedPrefKeys.NAME.toString(),);
-    _age = PreferenceUtils.getString(SharedPrefKeys.AGE.toString(),);
+    _name = PreferenceUtils.getString(SharedPrefKeys.NAME,);
+    _age = PreferenceUtils.getString(SharedPrefKeys.AGE,);
     _scaffoldkey.currentState.showSnackBar(SnackBar(
       backgroundColor: Colors.blue,
       content: Text("Name: $_name \n Age: $_age"),
     ));
   }
   void _deleteInfo(){
-    PreferenceUtils.remove(SharedPrefKeys.NAME.toString());
-    PreferenceUtils.remove(SharedPrefKeys.AGE.toString());
+    PreferenceUtils.remove(SharedPrefKeys.NAME);
+    PreferenceUtils.remove(SharedPrefKeys.AGE);
   }
 }
